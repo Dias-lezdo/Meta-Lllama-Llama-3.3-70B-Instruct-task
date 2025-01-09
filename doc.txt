@@ -1,0 +1,75 @@
+Workflow for PDF to Pagewise Text Extraction and AI Processing
+
+*1. Start*
+   - Begin the execution of the script.
+
+*PDF to Pagewise Text Extraction*
+
+*2. Input Paths*
+   - Specify the path to the input PDF file (pdf_path).
+   - Specify the path to save the extracted text (output_text_path).
+
+*3. Open PDF File*
+   - Open the PDF file in binary mode ('rb').
+   - If the file cannot be opened, go to *Error Handling*.
+
+*4. Initialize PDF Reader*
+   - Create a PdfReader object using the PyPDF2 library.
+
+*5. Create Output File*
+   - Open the output file in write mode ('w').
+
+*6. Loop Through PDF Pages*
+   - For each page in the PDF:
+     - Extract text using page.extract_text().
+     - Check if the text is non-empty:
+       - *If yes*: Write the page number and text to the output file.
+       - *If no*: Skip the page.
+
+*7. Close Files*
+   - After processing all pages:
+     - Close the PDF file.
+     - Close the output text file.
+
+*8. Completion*
+   - Print a success message indicating that the text was saved.
+
+*9. Error Handling*
+   - Catch any exceptions (e.g., file not found, permission issues).
+   - Print an error message.
+
+*AI Processing Workflow*
+
+*10. Read Extracted Text*
+   - Open the output text file and read the pagewise data.
+
+*11. Chunk Text*
+   - Split the text into overlapping chunks using the chunk_text function.
+   - Parameters:
+     - chunk_size: Number of tokens per chunk.
+     - overlap: Number of overlapping tokens between chunks.
+
+*12. Process Chunks with AI*
+   - For each chunk:
+     - Pass it to the process_chunk function.
+     - Use the RAG prompt to:
+       - Analyze and group content by evaluation date and title.
+       - Consolidate page numbers into ranges.
+       - Identify provider details and specialty.
+       - Format the output as JSON.
+     - Append the results to a final list.
+
+*13. Clear Memory*
+   - Use torch.cuda.empty_cache() to free GPU memory after processing each chunk.
+
+*14. Combine Results*
+   - Aggregate all processed chunk results into a single JSON structure.
+
+*15. Save or Display Results*
+   - Print or save the final JSON data for further use.
+
+*Error Handling*
+
+*16. Exceptions in AI Processing*
+   - Catch and log exceptions during chunk processing.
+   - Skip problematic chunks and continue.
